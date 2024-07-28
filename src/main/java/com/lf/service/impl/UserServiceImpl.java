@@ -29,7 +29,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public User findUserByUserName(String userName) {
         QueryWrapper<User> wrapper=new QueryWrapper<>();
         wrapper.eq("username",userName);
-        wrapper.select("*");
+//        wrapper.select("*");
         return baseMapper.selectOne(wrapper);
     }
 }

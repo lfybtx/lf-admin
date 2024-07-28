@@ -14,12 +14,16 @@ spring:
       url: jdbc:mysql://localhost:3306/lfadmin?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
       username: root
       password: 123456
-
+  redis:
+    timeout: 10000
+    expire: 180000
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**/*.xml
   type-aliases-package: com.manong.entity
   configuration:
     map-underscore-to-camel-case: false
+
+#自定义配置
 
 logging:
   level:
@@ -32,3 +36,7 @@ server:
 jwt:
   secret: com.lf
   expiration: 180000
+
+request:
+  login:
+    url: /api/user/login

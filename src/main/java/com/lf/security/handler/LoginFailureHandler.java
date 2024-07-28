@@ -1,6 +1,7 @@
 package com.lf.security.handler;
 
 import com.alibaba.fastjson.JSON;
+import com.lf.security.exception.CustomerAuthenticationException;
 import com.lf.utils.Result;
 import com.lf.utils.ResultCode;
 import org.springframework.security.authentication.*;
@@ -30,6 +31,7 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
 //获取输出流
         ServletOutputStream outputStream = response.getOutputStream();
         String message = null;//提示信息
+        int code = ResultCode.ERROR;
 //判断异常类型
         if (exception instanceof AccountExpiredException) {
             message = "账户过期,登录失败！";
@@ -43,12 +45,14 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
             message = "账户被锁,登录失败！";
         } else if (exception instanceof InternalAuthenticationServiceException) {
             message = "账户不存在,登录失败！";
+        } else if (exception instanceof CustomerAuthenticationException) {
+            message = exception.getMessage();
+            code = ResultCode.NO_LOGIN;
         } else {
             message = "登录失败！";
         }
 //将错误信息转换成JSON
-        String result =
-                JSON.toJSONString(Result.error().code(ResultCode.ERROR).message(message));
+        String result = JSON.toJSONString(Result.error().code(ResultCode.ERROR).message(message));
         outputStream.write(result.getBytes(StandardCharsets.UTF_8));
         outputStream.flush();
         outputStream.close();

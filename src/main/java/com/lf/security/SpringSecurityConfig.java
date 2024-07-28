@@ -1,5 +1,6 @@
 package com.lf.security;
 
+import com.lf.security.filter.CheckTokenFilter;
 import com.lf.security.handler.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -10,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -24,6 +26,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     private AnonymousAuthenticationHandler anonymousAuthenticationHandler;
     @Autowired
     private CustomerAccessDeniedHandler customerAccessDeniedHandler;
+    @Autowired
+    private CheckTokenFilter checkTokenFilter;
 
     /**
      * 注入加密处理类
@@ -37,6 +41,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.addFilterBefore(checkTokenFilter,
+                UsernamePasswordAuthenticationFilter.class);
         http.formLogin()
                 .loginProcessingUrl("/api/user/login")
 // 设置登录验证成功或失败后的的跳转地址

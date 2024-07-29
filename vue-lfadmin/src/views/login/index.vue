@@ -55,20 +55,19 @@
 </template>
 
 <script>
-import {validUsername} from '@/utils/validate'
 
 export default {
   name: 'Login',
   data() {
     const validateUsername = (rule, value, callback) => {
-      if (!validUsername(value)) {
+      if (value.length === 0) {
         callback(new Error('用户名不能为空！'))
       } else {
         callback()
       }
     }
     const validatePassword = (rule, value, callback) => {
-      if (value.length < 6) {
+      if (value.length === 0) {
         callback(new Error('密码不能为空！'))
       } else {
         callback()
@@ -77,7 +76,7 @@ export default {
     return {
       loginForm: {
         username: 'admin',
-        password: '111111'
+        password: '123456'
       },
       loginRules: {
         username: [{required: true, trigger: 'blur', validator: validateUsername}],

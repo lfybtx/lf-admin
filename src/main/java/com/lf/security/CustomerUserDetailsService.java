@@ -49,9 +49,9 @@ public class CustomerUserDetailsService implements UserDetailsService {
         List<GrantedAuthority> authorityList =
                 AuthorityUtils.createAuthorityList(strings);
         user.setAuthorities(authorityList);
-//设置菜单列表
+        //设置菜单列表
         user.setPermissionList(permissionList);
-//返回用户信息
+        //返回用户信息
         return user;
     }
 }

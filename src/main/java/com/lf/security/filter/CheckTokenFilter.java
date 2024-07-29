@@ -50,7 +50,7 @@ public class CheckTokenFilter extends OncePerRequestFilter {
         } catch (AuthenticationException e) {
             loginFailureHandler.onAuthenticationFailure(request, response, e);
         }
-//登录请求不需要验证token
+        //登录请求不需要验证token
         doFilter(request, response, filterChain);
     }
 

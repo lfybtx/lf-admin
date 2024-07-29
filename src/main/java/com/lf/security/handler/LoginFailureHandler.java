@@ -26,13 +26,13 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
     public void onAuthenticationFailure(HttpServletRequest request,
                                         HttpServletResponse response, AuthenticationException exception) throws
             IOException, ServletException {
-//设置客户端响应编码格式
+        //设置客户端响应编码格式
         response.setContentType("application/json;charset=UTF-8");
-//获取输出流
+        //获取输出流
         ServletOutputStream outputStream = response.getOutputStream();
         String message = null;//提示信息
         int code = ResultCode.ERROR;
-//判断异常类型
+        //判断异常类型
         if (exception instanceof AccountExpiredException) {
             message = "账户过期,登录失败！";
         } else if (exception instanceof BadCredentialsException) {
@@ -51,7 +51,7 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
         } else {
             message = "登录失败！";
         }
-//将错误信息转换成JSON
+        //将错误信息转换成JSON
         String result = JSON.toJSONString(Result.error().code(ResultCode.ERROR).message(message));
         outputStream.write(result.getBytes(StandardCharsets.UTF_8));
         outputStream.flush();

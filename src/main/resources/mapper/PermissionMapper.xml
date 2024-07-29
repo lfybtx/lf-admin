@@ -31,7 +31,7 @@
         select DISTINCT p.id,
                         p.parent_id,
                         p.label,
-                        p.`code`,
+                        p.code,
                         p.url,
                         p.type,
                         p.icon,

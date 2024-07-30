@@ -1,5 +1,5 @@
 module.exports = {
-  title: 'LF 权限管理系统',
+  title: 'Vue Element Admin',
 
   /**
    * @type {boolean} true | false

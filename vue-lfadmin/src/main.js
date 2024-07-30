@@ -23,7 +23,13 @@ import * as filters from './filters' // global filters
 import myconfirm from '@/utils/myconfirm'
 Vue.prototype.$myconfirm = myconfirm;
 
+//导入清空表单工具
+import resetForm from '@/utils/resetForm'
+Vue.prototype.$resetForm = resetForm;
 
+//导入清空表单工具
+import objCopy from '@/utils/objCopy'
+Vue.prototype.$objCopy = objCopy;
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api

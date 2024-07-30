@@ -78,7 +78,7 @@
     "last 2 versions"
   ],
   "bugs": {
-    "url": "https://github.com/PanJiaChen/vue-element-admin/issues"
+    "url": "https://github.com/lfybtx/lf-admin/issues"
   },
   "engines": {
     "node": ">=8.9",
@@ -99,9 +99,5 @@
       "eslint --fix",
       "git add"
     ]
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/PanJiaChen/vue-element-admin.git"
   }
 }

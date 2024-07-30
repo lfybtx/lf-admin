@@ -49,41 +49,49 @@ public class User implements Serializable , UserDetails {
     /**
      * 帐户是否过期
      */
-    private boolean isAccountNonExpired = true;
+    @TableField("is_account_non_expired")
+    private int isAccountNonExpired;
 
     /**
      * 帐户是否被锁定
      */
-    private boolean isAccountNonLocked = true;
+    @TableField("is_account_non_locked")
+    private int isAccountNonLocked;
 
     /**
      * 密码是否过期
      */
-    private boolean isCredentialsNonExpired = true;
+    @TableField("is_credentials_non_expired")
+    private int isCredentialsNonExpired;
 
     /**
      * 帐户是否可用
      */
-    private boolean isEnabled = true;
+    @TableField("is_enabled")
+    private int isEnabled;
 
     /**
      * 真实姓名
      */
+    @TableField("real_name")
     private String realName;
 
     /**
      * 昵称
      */
+    @TableField("nick_name")
     private String nickName;
 
     /**
      * 所属部门ID
      */
+    @TableField("department_id")
     private Long departmentId;
 
     /**
      * 所属部门名称
      */
+    @TableField("department_name")
     private String departmentName;
 
     /**
@@ -109,22 +117,27 @@ public class User implements Serializable , UserDetails {
     /**
      * 是否是管理员(1-管理员)
      */
+    @TableField("is_admin")
     private Integer isAdmin;
 
     /**
      * 创建时间
      */
+    @TableField("create_time")
     private Date createTime;
 
     /**
      * 修改时间
      */
+    @TableField("update_time")
     private Date updateTime;
 
     /**
      * 是否删除(0-未删除，1-已删除)
      */
+    @TableField("is_delete")
     private Integer isDelete;
+
 
 
     /**
@@ -137,4 +150,24 @@ public class User implements Serializable , UserDetails {
      */
     @TableField(exist = false)
     private List<Permission> permissionList;
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return isAccountNonExpired == 1;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return isAccountNonLocked == 1;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return isCredentialsNonExpired == 1;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return isEnabled == 1;
+    }
 }

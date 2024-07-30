@@ -6,26 +6,27 @@ import qs from 'qs'
 
 // 创建一个 axios 实例
 const service = axios.create({
-  baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
-  timeout: 5000 // 请求超时
+  baseURL: process.env.VUE_APP_BASE_API, // url = 基础 url + 请求 url
+  // withCredentials: true, // 当跨域请求时发送 cookies
+  timeout: 5000 // 请求超时时间
 })
 
 // 请求拦截器
 service.interceptors.request.use(
   config => {
     console.log(config)
-    // 在请求发送之前做一些处理
+    // 在请求发送之前做一些事情
     if (store.getters.token) {
-      // 让每个请求携带 token
-      // ['X-Token'] 是自定义的请求头键
-      // 请根据实际情况修改
+      // 让每个请求携带令牌
+      // ['X-Token'] 是一个自定义的 headers 键
+      // 请根据实际情况进行修改
       config.headers['token'] = getToken()
     }
     return config
   },
   error => {
     // 处理请求错误
-    console.log(error) // 仅用于调试
+    console.log(error) // 用于调试
     return Promise.reject(error)
   }
 )
@@ -33,30 +34,30 @@ service.interceptors.request.use(
 // 响应拦截器
 service.interceptors.response.use(
   /**
-   * 如果你想获取 http 信息（例如头部或状态）
+   * 如果你想获取 http 信息，例如 headers 或状态
    * 请返回 response => response
    */
   /**
-   * 根据自定义代码判断请求状态
-   * 这里仅为示例
-   * 你也可以通过 HTTP 状态码判断状态
+   * 通过自定义代码确定请求状态
+   * 这里只是一个示例
+   * 你也可以通过 HTTP 状态代码来判断状态
    */
   response => {
     const res = response.data
-    // 如果自定义代码不是 200，则判断为错误
+    // 如果自定义代码不是 200，则判断为错误。
     if (res.code !== 200) {
       Message({
-        message: res.message || 'Error',
+        message: res.message || '错误',
         type: 'error',
         duration: 5 * 1000
       })
 
-      // 50008: 非法的 token；50012: 其他客户端登录；50014: Token 过期；
+      // 50008: 非法令牌; 50012: 其他客户端登录了; 50014: 令牌过期;
       if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
-        // 需要重新登录
-        MessageBox.confirm('You have been logged out, you can cancel to stay on this page, or log in again', 'Confirm logout', {
-          confirmButtonText: 'Re-Login',
-          cancelButtonText: 'Cancel',
+        // 重新登录
+        MessageBox.confirm('你已被登出，你可以取消以停留在此页面，或者重新登录', '确认登出', {
+          confirmButtonText: '重新登录',
+          cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
           store.dispatch('user/resetToken').then(() => {
@@ -64,13 +65,13 @@ service.interceptors.response.use(
           })
         })
       }
-      return Promise.reject(new Error(res.message || 'Error'))
+      return Promise.reject(new Error(res.message || '错误'))
     } else {
       return res
     }
   },
   error => {
-    console.log('err' + error) // 仅用于调试
+    console.log('错误' + error) // 用于调试
     Message({
       message: error.message,
       type: 'error',
@@ -117,6 +118,8 @@ const http = {
     } else {
       _params = '/'
       for (const key in params) {
+        console.log(key)
+        console.log(params[key])
         if (params.hasOwnProperty(key) && params[key] !== null && params[key] !== '') {
           _params += `${params[key]}/`
         }
@@ -137,6 +140,7 @@ const http = {
     } else {
       _params = '/'
       for (const key in params) {
+        // eslint-disable-next-line no-prototype-builtins
         if (params.hasOwnProperty(key) && params[key] !== null && params[key] !== '') {
           _params += `${params[key]}/`
         }

@@ -1,19 +1,20 @@
 <template>
   <div class="navbar">
-    <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
+    <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container"
+               @toggleClick="toggleSideBar"/>
 
-    <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
+    <breadcrumb id="breadcrumb-container" class="breadcrumb-container"/>
 
     <div class="right-menu">
       <template v-if="device!=='mobile'">
-        <search id="header-search" class="right-menu-item" />
+        <search id="header-search" class="right-menu-item"/>
 
-        <error-log class="errLog-container right-menu-item hover-effect" />
+        <error-log class="errLog-container right-menu-item hover-effect"/>
 
-        <screenfull id="screenfull" class="right-menu-item hover-effect" />
+        <screenfull id="screenfull" class="right-menu-item hover-effect"/>
 
         <el-tooltip content="Global Size" effect="dark" placement="bottom">
-          <size-select id="size-select" class="right-menu-item hover-effect" />
+          <size-select id="size-select" class="right-menu-item hover-effect"/>
         </el-tooltip>
 
       </template>
@@ -21,7 +22,7 @@
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
         <div class="avatar-wrapper">
           <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
-          <i class="el-icon-caret-bottom" />
+          <i class="el-icon-caret-bottom"/>
         </div>
         <el-dropdown-menu slot="dropdown">
           <router-link to="/">
@@ -40,7 +41,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import {mapGetters} from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 import ErrorLog from '@/components/ErrorLog'
@@ -48,8 +49,9 @@ import Screenfull from '@/components/Screenfull'
 import SizeSelect from '@/components/SizeSelect'
 import Search from '@/components/HeaderSearch'
 //导入脚本
-import { logout } from "@/api/user";
-import { getToken, removeToken, clearStorage } from "@/utils/auth";
+import {logout} from "@/api/user";
+import {getToken, removeToken, clearStorage} from "@/utils/auth";
+
 export default {
   components: {
     Breadcrumb,
@@ -83,7 +85,7 @@ export default {
           //清空token
           removeToken();
           clearStorage();
-          //跳转到登录页面
+        //跳转到登录页面
           window.location.href = "/login";
         }
       }
@@ -98,7 +100,7 @@ export default {
   overflow: hidden;
   position: relative;
   background: #fff;
-  box-shadow: 0 1px 4px rgba(0,21,41,.08);
+  box-shadow: 0 1px 4px rgba(0, 21, 41, .08);
 
   .hamburger-container {
     line-height: 46px;
@@ -106,7 +108,7 @@ export default {
     float: left;
     cursor: pointer;
     transition: background .3s;
-    -webkit-tap-highlight-color:transparent;
+    -webkit-tap-highlight-color: transparent;
 
     &:hover {
       background: rgba(0, 0, 0, .025)

@@ -19,10 +19,10 @@ import './permission' // permission control
 import './utils/error-log' // error log
 
 import * as filters from './filters' // global filters
-
 //导入封装信息确认提示框组件脚本
 import myconfirm from '@/utils/myconfirm'
 Vue.prototype.$myconfirm = myconfirm;
+
 
 /**
  * If you don't want to use mock-server

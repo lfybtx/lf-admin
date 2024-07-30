@@ -108,10 +108,7 @@ public class SysUserController {
         //返回数据
         return Result.ok(userInfo).message("用户信息查询成功");
     }
-<<<<<<< HEAD
 
-=======
->>>>>>> 469e9d2fc934cabe452241c969656a912ec9ea66
     /**
      * 获取菜单数据
      *
@@ -134,15 +131,10 @@ public class SysUserController {
         // 返回数据
         return Result.ok(routerVoList).message("菜单数据获取成功");
     }
-<<<<<<< HEAD
 
     /**
      * 用户退出
      *
-=======
-    /**
-     * 用户退出
->>>>>>> 469e9d2fc934cabe452241c969656a912ec9ea66
      * @param request
      * @param response
      * @return
@@ -159,15 +151,9 @@ public class SysUserController {
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null) {
-<<<<<<< HEAD
             //清空用户信息
             new SecurityContextLogoutHandler().logout(request, response, authentication);
             //清空redis里面的token
-=======
-        //清空用户信息
-            new SecurityContextLogoutHandler().logout(request, response, authentication);
-        //清空redis里面的token
->>>>>>> 469e9d2fc934cabe452241c969656a912ec9ea66
             String key = "token_" + token;
             redisService.del(key);
         }

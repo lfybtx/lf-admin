@@ -12,13 +12,11 @@ export function setToken(token) {
 
 export function removeToken() {
   return Cookies.remove(TokenKey)
-
-
 }
 
 /**
  * 清空sessionStorage
  */
-export function clearStorage() {
+export function clearStorage(){
   return sessionStorage.clear();
 }

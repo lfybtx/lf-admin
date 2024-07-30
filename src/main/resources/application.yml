@@ -23,6 +23,11 @@ mybatis-plus:
   type-aliases-package: com.lf.entity
   configuration:
     map-underscore-to-camel-case: true
+  global-config:
+    db-config:
+      logic-not-delete-value: 0
+      logic-delete-value: 1
+      logic-delete-field: isDelete
 #  开启详细的sql日志
 #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 

@@ -3,6 +3,7 @@ package com.lf.service;
 import com.lf.entity.Permission;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lf.entity.vo.PermissionQueryVo;
+import com.lf.entity.vo.RolePermissionVo;
 
 import java.util.List;
 
@@ -39,4 +40,12 @@ public interface PermissionService extends IService<Permission> {
      * @return
      */
     boolean hasChildrenOfPermission(Long id);
+
+    /**
+     * 查询分配权限树列表
+     * @param userId
+     * @param roleId
+     * @return
+     */
+    RolePermissionVo findPermissionTree(Long userId, Long roleId);
 }

@@ -21,13 +21,13 @@
       stripe
       style="width: 100%; margin-bottom: 20px"
       row-key="id"
-      default-expand-all
+      :default-expand-all="false"
       :tree-props="{ children: 'children' }"
     >
-      <el-table-column prop="departmentName" label="部门名称"></el-table-column>
-      <el-table-column prop="parentName" label="所属部门"></el-table-column>
-      <el-table-column prop="phone" label="部门电话"></el-table-column>
-      <el-table-column prop="address" label="部门位置"></el-table-column>
+      <el-table-column prop="departmentName" label="部门名称" align="center"></el-table-column>
+      <el-table-column prop="parentName" label="所属部门" align="center"></el-table-column>
+      <el-table-column prop="phone" label="部门电话" align="center"></el-table-column>
+      <el-table-column prop="address" label="部门位置" align="center"></el-table-column>
       <el-table-column label="操作" width="200" align="center">
         <template slot-scope="scope">
           <el-button
@@ -99,7 +99,7 @@
           :data="treeList"
           node-key="id"
           :props="defaultProps"
-          :default-expand-all="true"
+          :default-expand-all="false"
           :highlight-current="true"
           :expand-on-click-node="false"
           @node-click="handleNodeClick"

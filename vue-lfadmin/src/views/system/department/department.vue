@@ -99,7 +99,7 @@
           :data="treeList"
           node-key="id"
           :props="defaultProps"
-          :default-expand-all="false"
+          :default-expand-all="true"
           :highlight-current="true"
           :expand-on-click-node="false"
           @node-click="handleNodeClick"
@@ -107,10 +107,6 @@
           <div class="customer-tree-node" slot-scope="{ node, data }">
             <span v-if="data.children.length === 0">
               <i class="el-icon-document"></i>
-            </span>
-            <span v-else @click="openBtn(data)">
-              <svg-icon v-if="data.open" icon-class="add-s"/>
-              <svg-icon v-else icon-class="sub-s"/>
             </span>
             <span style="margin-left: 5px">{{ node.label }}</span>
           </div>
@@ -213,7 +209,7 @@ export default {
      * @param row
      */
     handleEdit(row) {
-    //数据回显
+      //数据回显
       this.$objCopy(row, this.dept);
       //设置窗口标题
       this.deptDialog.title = "编辑部门";
@@ -225,17 +221,17 @@ export default {
      */
     async handleDelete(row) {
       //查询部门下是否存在子部门或用户
-      let result = await departmentApi.checkDepartment({ id: row.id });
+      let result = await departmentApi.checkDepartment({id: row.id});
       //判断是否可以删除
       if (!result.success) {
         //提示不能删除
         this.$message.warning(result.message);
       } else {
         //确认是否删除
-        let confirm =await this.$myconfirm("确定要删除该数据吗?");
+        let confirm = await this.$myconfirm("确定要删除该数据吗?");
         if (confirm) {
           //发送删除请求
-          let res = await departmentApi.deleteById({ id: row.id });
+          let res = await departmentApi.deleteById({id: row.id});
           //判断是否成功
           if (res.success) {
             //成功提示
@@ -254,15 +250,15 @@ export default {
      */
     onConfirm() {
       //表单验证
-      this.$refs.deptForm.validate( async (valid) => {
+      this.$refs.deptForm.validate(async (valid) => {
         //如果验证通过
         if (valid) {
           let res = null;//后端返回的数据
           //判断部门ID是否有数据，如果部门ID为空，则表示新增，否则就是修改
-          if(this.dept.id===''){//新增
+          if (this.dept.id === '') {//新增
             //发送新增请求
             res = await departmentApi.addDept(this.dept);
-          }else{
+          } else {
             //发送修改请求
             res = await departmentApi.updateDept(this.dept);
           }
@@ -379,78 +375,79 @@ export default {
 
 <style lang="scss" scoped>
 
-::v-deep .el-tree {
-  .el-tree-node {
-    position: relative;
-    padding-left: 10px;
-  }
-
-  .el-tree-node__children {
-    padding-left: 20px;
-  }
-
-  .el-tree-node :last-child:before {
-    height: 40px;
-  }
-
-  .el-tree > .el-tree-node:before {
-    border-left: none;
-  }
-
-  .el-tree > .el-tree-node:after {
-    border-top: none;
-  }
-
-  .el-tree-node:before,
-  .el-tree-node:after {
-    content: "";
-    left: -4px;
-    position: absolute;
-    right: auto;
-    border-width: 1px;
-  }
-
-  .tree :first-child .el-tree-node:before {
-    border-left: none;
-  }
-
-  .el-tree-node:before {
-    border-left: 1px dotted #d9d9d9;
-    bottom: 0px;
-    height: 100%;
-    top: -25px;
-    width: 1px;
-  }
-
-  .el-tree-node:after {
-    border-top: 1px dotted #d9d9d9;
-    height: 20px;
-    top: 14px;
-    width: 24px;
-  }
-
-  .el-tree-node__expand-icon.is-leaf {
-    width: 8px;
-  }
-
-  .el-tree-node__content > .el-tree-node__expand-icon {
-    display: none;
-  }
-
-  .el-tree-node__content {
-    line-height: 30px;
-    height: 30px;
-    padding-left: 10px !important;
-  }
-}
-
-::v-deep .el-tree > div {
-  &::before {
-    display: none;
-  }
-
-  &::after {
-    display: none;
-  }
-}
+//::v-deep .el-tree {
+//
+//  .el-tree-node {
+//    position: relative;
+//    padding-left: 10px;
+//  }
+//
+//  .el-tree-node__children {
+//    padding-left: 20px;
+//  }
+//
+//  .el-tree-node :last-child:before {
+//    height: 40px;
+//  }
+//
+//  .el-tree > .el-tree-node:before {
+//    border-left: none;
+//  }
+//
+//  .el-tree > .el-tree-node:after {
+//    border-top: none;
+//  }
+//
+//  .el-tree-node:before,
+//  .el-tree-node:after {
+//    content: "";
+//    left: -4px;
+//    position: absolute;
+//    right: auto;
+//    border-width: 1px;
+//  }
+//
+//  .tree :first-child .el-tree-node:before {
+//    border-left: none;
+//  }
+//
+//  .el-tree-node:before {
+//    border-left: 1px dotted #d9d9d9;
+//    bottom: 0px;
+//    height: 100%;
+//    top: -25px;
+//    width: 1px;
+//  }
+//
+//  .el-tree-node:after {
+//    border-top: 1px dotted #d9d9d9;
+//    height: 20px;
+//    top: 14px;
+//    width: 24px;
+//  }
+//
+//  .el-tree-node__expand-icon.is-leaf {
+//    width: 8px;
+//  }
+//
+//  .el-tree-node__content > .el-tree-node__expand-icon {
+//    display: none;
+//  }
+//
+//  .el-tree-node__content {
+//    line-height: 30px;
+//    height: 30px;
+//    padding-left: 10px !important;
+//  }
+//}
+//
+//::v-deep .el-tree > div {
+//  &::before {
+//    display: none;
+//  }
+//
+//  &::after {
+//    display: none;
+//  }
+//}
 </style>

@@ -1,5 +1,22 @@
 import http from '@/utils/request'
-
+export default {
+  /**
+   * 查询用户列表
+   * @param params
+   * @returns
+   */
+  async getUserList(params){
+    return await http.get("/api/user/list",params);
+  },
+  /**
+   * 添加用户
+   * @param params
+   * @returns
+   */
+  async addUser(params){
+    return await http.post("/api/user/add",params);
+  }
+}
 /**
  * 用户登录
  * @returns

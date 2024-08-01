@@ -9,7 +9,7 @@
       :height="tableHeight"
       :data="menuList"
       row-key="id"
-      :default-expand-all="false"
+      :default-expand-all="true"
       :tree-props="{ children: 'children' }"
       :border="true"
       stripe
@@ -154,10 +154,6 @@
             <!-- 长度为0说明没有下级 -->
             <span v-if="data.children.length === 0">
               <i class="el-icon-document" style="color: #8c8c8c; font-size: 18px"></i>
-            </span>
-            <span v-else @click.stop="openBtn(data)">
-              <svg-icon v-if="data.open" icon-class="add-s"></svg-icon>
-              <svg-icon v-else icon-class="sub-s"></svg-icon>
             </span>
             <span style="margin-left: 3px">{{ node.label }}</span>
           </div>
@@ -489,4 +485,5 @@ i {
   padding: 0 15px;
   transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
+
 </style>

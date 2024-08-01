@@ -43,6 +43,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.addFilterBefore(checkTokenFilter,
                 UsernamePasswordAuthenticationFilter.class);
+
         http.formLogin()
                 .loginProcessingUrl("/api/user/login")
 // 设置登录验证成功或失败后的的跳转地址

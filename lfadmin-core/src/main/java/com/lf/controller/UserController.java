@@ -5,11 +5,15 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lf.entity.User;
 import com.lf.entity.vo.UserQueryVo;
+import com.lf.service.FileService;
 import com.lf.service.UserService;
 import com.lf.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Objects;
 
 /**
  * <p>
@@ -27,6 +31,10 @@ public class UserController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private FileService fileService;
+
     /**
      * 查询所有用户列表
      *
@@ -39,6 +47,7 @@ public class UserController {
 
     /**
      * 查询用户列表
+     *
      * @param userQueryVo
      * @return
      */
@@ -52,6 +61,7 @@ public class UserController {
         //返回数据
         return Result.ok(page);
     }
+
     /**
      * 添加用户
      *
@@ -69,10 +79,26 @@ public class UserController {
         //密码加密
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         //调用保存用户信息的方法
-        if(userService.save(user)){
+        if (userService.save(user)) {
             return Result.ok().message("用户添加成功");
         }
         return Result.error().message("用户添加失败");
+    }
+
+    /**
+     * 文件上传
+     *
+     * @param file
+     * @param module
+     * @return
+     */
+    @PostMapping("/avatar/upload")
+    public Result upload(MultipartFile file, String module) {
+        String url = fileService.avatarUpload(file, module);
+        if (!Objects.isNull(url)) {
+            return Result.ok(url).message("上传成功！");
+        }
+        return Result.error().message("上传失败！");
     }
 }
 

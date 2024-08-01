@@ -14,6 +14,7 @@ Thumbs.db
 *.log
 
 # 排除特定文件
+lfadmin-core/src/main/resources/oss.properties
 lfadmin-core/lfadmin-core.iml
 lfadmin-core/target
 lf-admin.iml

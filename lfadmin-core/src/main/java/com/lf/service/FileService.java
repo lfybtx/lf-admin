@@ -9,10 +9,10 @@ public interface FileService {
      * @param module 文件夹名称
      * @return
      */
-    String upload(MultipartFile file, String module);
+    String avatarUpload(MultipartFile file, String module);
     /**
      * 删除文件
      * @param url
      */
-    void deleteFile(String url);
+    void deleteAvatar(String url);
 }

@@ -151,7 +151,20 @@
               </el-radio-group>
             </el-form-item>
             <br>
-            <!-- 用户头像：待补充 -->
+            <!-- 用户头像 -->
+            <el-form-item label="头像">
+              <el-upload
+                :show-file-list="false"
+                :on-success="handleAvatarSuccess"
+                :before-upload="beforeAvatarUpload"
+                class="avatar-uploader"
+                :data="uploadHeader"
+                action="http://localhost:8080/api/user/avatar/upload?module=avatar"
+              >
+                <img v-if="user.avatar" :src="user.avatar">
+                <i v-else class="el-icon-plus avatar-uploader-icon"/>
+              </el-upload>
+            </el-form-item>
           </el-form>
         </div>
       </system-dialog>
@@ -198,7 +211,8 @@ import userApi from '@/api/user';
 //导入对话框组件
 import SystemDialog from '@/components/System/SystemDialog.vue'
 
-import Myicons from '@/utils/icons'
+//导入token
+import {getToken} from '@/utils/auth'
 export default {
   name: 'userList',
   components: {SystemDialog},
@@ -216,6 +230,8 @@ export default {
       }
     }
     return {
+      //上传需要携带的数据
+      uploadHeader:{"token":getToken()},
       //查询条件对象
       searchModel: {
         username: "",
@@ -440,9 +456,33 @@ export default {
     openParentBtn(data) {
       data.open = !data.open
       this.$refs.parentTree.store.nodesMap[data.id].expanded = !data.open
+    },
+    /**
+     * 上传成功回调
+     * @param res
+     * @param file
+     */
+    handleAvatarSuccess(res, file) {
+      this.user.avatar = res.data
+      // 强制重新渲染
+      this.$forceUpdate()
+    },
+    /**
+     * 上传校验
+     * @param file
+     * @returns {boolean}
+     */
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === 'image/jpeg'
+      const isLt10M = file.size / 1024 / 1024 < 10
+      if (!isJPG) {
+        this.$message.error('上传头像图片只能是 JPG 格式!')
+      }
+      if (!isLt10M) {
+        this.$message.error('上传头像图片大小不能超过 10MB!')
+      }
+      return isJPG && isLt10M
     }
-    ,
-
   }
   ,
   created() {
@@ -464,10 +504,37 @@ export default {
 ;
 </script>
 
-<style scoped>
+<style lang="css">
 .custom-tree-node {
   display: flex;
   align-items: center;
 }
 
+  /*用户头像*/
+.avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9 !important;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.avatar-uploader .el-upload:hover {
+  border-color: #409EFF;
+}
+
+.avatar-uploader .avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+}
+
+.avatar-uploader img {
+  width: 178px;
+  height: 178px;
+  display: block;
+}
 </style>

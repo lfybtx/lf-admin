@@ -1,5 +1,7 @@
 <template>
-  <div class="dashboard-container">
+  <div class="dashboard-container"
+  >
+
     <component :is="currentRole" />
   </div>
 </template>

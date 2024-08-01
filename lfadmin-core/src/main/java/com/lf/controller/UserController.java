@@ -94,7 +94,7 @@ public class UserController {
      */
     @PostMapping("/avatar/upload")
     public Result upload(MultipartFile file, String module) {
-        String url = fileService.avatarUpload(file, module);
+        String url = fileService.upload(file, module);
         if (!Objects.isNull(url)) {
             return Result.ok(url).message("上传成功！");
         }

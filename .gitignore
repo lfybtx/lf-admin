@@ -15,4 +15,4 @@ Thumbs.db
 
 # 排除特定文件
 lfadmin-core/lfadmin-core.iml
-lfadmin.iml
+lf-admin.iml

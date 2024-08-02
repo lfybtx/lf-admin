@@ -11,7 +11,10 @@
         <el-button type="primary" icon="el-icon-search" @click="search()">查询
         </el-button>
         <el-button icon="el-icon-refresh-right" @click="resetValue()">重置</el-button>
-        <el-button type="success" icon="el-icon-plus" @click="openAddWindow()">新增</el-button>
+        <el-button type="success" icon="el-icon-plus" @click="openAddWindow()"
+                   v-if="hasPermission('sys:department:add')"
+        >
+          新增</el-button>
       </el-form-item>
     </el-form>
     <!-- 数据表格 -->
@@ -35,6 +38,7 @@
             type="primary"
             size="small"
             @click="handleEdit(scope.row)"
+            v-if="hasPermission('sys:department:edit')"
           >编辑
           </el-button>
           <el-button
@@ -42,6 +46,7 @@
             type="danger"
             size="small"
             @click="handleDelete(scope.row)"
+            v-if="hasPermission('sys:department:delete')"
           >删除
           </el-button>
         </template>

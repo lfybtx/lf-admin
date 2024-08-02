@@ -77,7 +77,9 @@ const actions = {
         commit('SET_INTRODUCTION', introduction)
         //将用户ID保存到Vuex中
         commit('SET_USERUID', id);//用户ID
-        resolve(data)
+        //将权限字段保存到sessionStorage中
+        sessionStorage.setItem("codeList",JSON.stringify(roles));
+        resolve(data);
       }).catch(error => {
         reject(error)
       })

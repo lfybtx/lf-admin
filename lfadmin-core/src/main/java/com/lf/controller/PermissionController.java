@@ -6,6 +6,7 @@ import com.lf.entity.Permission;
 import com.lf.service.PermissionService;
 import com.lf.utils.Result;
 import com.lf.entity.vo.PermissionQueryVo;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.util.List;

@@ -11,6 +11,7 @@ import com.lf.service.RoleService;
 import com.lf.utils.Result;
 import com.lf.entity.vo.RoleQueryVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -58,6 +59,7 @@ public class RoleController {
      **/
 
     @PostMapping("/add")
+    @PreAuthorize("hasAuthority('sys:role:add')")
     public Result add(@RequestBody Role role) {
         if (roleService.save(role)) {
             return Result.ok().message("角色添加成功");
@@ -72,6 +74,7 @@ public class RoleController {
      * @return
      */
     @PutMapping("/update")
+    @PreAuthorize("hasAuthority('sys:role:update')")
     public Result update(@RequestBody Role role) {
         if (roleService.updateById(role)) {
             return Result.ok().message("角色修改成功");
@@ -86,6 +89,7 @@ public class RoleController {
      * @return
      */
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAuthority('sys:role:delete')")
     public Result delete(@PathVariable Long id) {
         List<Long> userIdByRoleId = roleService.findUserIdByRoleId(id);
         if (userIdByRoleId.size()>0){
@@ -107,6 +111,7 @@ public class RoleController {
      * @return
      */
     @GetMapping("/getAssignPermissionTree")
+    @PreAuthorize("hasAuthority('sys:role:assign')")
     public Result getAssignPermissionTree(Long userId, Long roleId) {
         //调用查询权限树数据的方法
         RolePermissionVo permissionTree =
@@ -122,6 +127,7 @@ public class RoleController {
      * @return
      */
     @PostMapping("/saveRoleAssign")
+    @PreAuthorize("hasAuthority('sys:role:assign')")
     public Result saveRoleAssign(@RequestBody RolePermissionDTO rolePermissionDTO) {
         if (roleService.saveRolePermission(rolePermissionDTO.getRoleId(), rolePermissionDTO.getList())) {
             return Result.ok().message("权限分配成功");

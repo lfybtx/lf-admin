@@ -58,7 +58,7 @@
           </el-button>
           <el-button icon="el-icon-delete" @click="resetValue()">重置</el-button>
           <el-button icon="el-icon-plus" size="small" type="success"
-                     @click="openAddWindow()">新增
+                     @click="openAddWindow()" v-if="hasPermission('sys:user:add')">新增
           </el-button>
         </el-form-item>
       </el-form>
@@ -78,13 +78,13 @@
         <el-table-column align="center" width="290" label="操作">
           <template slot-scope="scope">
             <el-button icon="el-icon-edit" type="primary"
-                       size="mini" @click="handleEdit(scope.row)">编辑
+                       size="mini" @click="handleEdit(scope.row)" v-if="hasPermission('sys:user:edit')">编辑
             </el-button>
             <el-button icon="el-icon-delete" type="danger"
-                       size="mini" @click="handleDelete(scope.row)">删除
+                       size="mini" @click="handleDelete(scope.row)" v-if="hasPermission('sys:user:delete')">删除
             </el-button>
             <el-button icon="el-icon-setting" type="primary"
-                       size="mini" @click="assignRole(scope.row)">分配角色
+                       size="mini" @click="assignRole(scope.row)" v-if="hasPermission('sys:user:assign')">分配角色
             </el-button>
           </template>
         </el-table-column>

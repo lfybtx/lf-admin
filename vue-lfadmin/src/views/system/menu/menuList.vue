@@ -1,7 +1,7 @@
 <template>
   <el-main>
     <!-- 新增按钮 -->
-    <el-button type="success" icon="el-icon-plus" @click="openAddWindow">新增</el-button>
+    <el-button type="success" icon="el-icon-plus" @click="openAddWindow" v-if="hasPermission('sys:menu:add')">新增</el-button>
 
     <!-- 数据表格 -->
     <el-table
@@ -38,6 +38,7 @@
             icon="el-icon-edit"
             size="small"
             @click="editMenu(scope.row)"
+            v-if="hasPermission('sys:menu:edit')"
           >编辑
           </el-button>
           <el-button
@@ -45,6 +46,7 @@
             size="small"
             icon="el-icon-delete"
             @click="deleteMenu(scope.row)"
+            v-if="hasPermission('sys:menu:delete')"
           >删除
           </el-button>
         </template>

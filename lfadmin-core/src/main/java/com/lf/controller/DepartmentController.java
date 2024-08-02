@@ -5,6 +5,7 @@ import com.lf.entity.Department;
 import com.lf.service.DepartmentService;
 import com.lf.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -55,6 +56,7 @@ public class DepartmentController {
  * @return
  */
     @PostMapping("/add")
+    @PreAuthorize("hasAuthority('sys:department:add')")
     public Result add(@RequestBody Department department){
         if(departmentService.save(department)){
             return Result.ok().message("部门添加成功");
@@ -67,6 +69,7 @@ public class DepartmentController {
      * @return
      */
     @PutMapping("/update")
+    @PreAuthorize("hasAuthority('sys:department:update')")
     public Result update(@RequestBody Department department){
         if(departmentService.updateById(department)){
             return Result.ok().message("部门修改成功");
@@ -96,6 +99,7 @@ public class DepartmentController {
      * @return
      */
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAuthority('sys:department:delete')")
     public Result delete(@PathVariable Long id){
         if(departmentService.removeById(id)){
             return Result.ok().message("部门删除成功");

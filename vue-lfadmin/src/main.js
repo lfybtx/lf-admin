@@ -27,6 +27,10 @@ Vue.prototype.$myconfirm = myconfirm;
 import resetForm from '@/utils/resetForm'
 Vue.prototype.$resetForm = resetForm;
 
+//导入按钮权限判断
+import hasPermission from '@/permission/index'
+Vue.prototype.hasPermission = hasPermission;
+
 //导入清空表单工具
 import objCopy from '@/utils/objCopy'
 Vue.prototype.$objCopy = objCopy;

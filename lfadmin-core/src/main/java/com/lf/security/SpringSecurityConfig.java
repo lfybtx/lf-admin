@@ -1,5 +1,6 @@
 package com.lf.security;
 
+import com.lf.security.filter.CaptchaFilter;
 import com.lf.security.filter.CheckTokenFilter;
 import com.lf.security.handler.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private CheckTokenFilter checkTokenFilter;
 
+    @Autowired
+    private CaptchaFilter captchaFilter;
     /**
      * 注入加密处理类
      *
@@ -46,7 +49,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.addFilterBefore(checkTokenFilter,
                 UsernamePasswordAuthenticationFilter.class);
-
+        http.addFilterBefore(captchaFilter,
+                UsernamePasswordAuthenticationFilter.class);
         http.formLogin()
                 .loginProcessingUrl("/api/user/login")
                 // 设置登录验证成功或失败后的的跳转地址
@@ -56,7 +60,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/user/login").permitAll()
+                .antMatchers("/api/user/login","/captcha").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling()

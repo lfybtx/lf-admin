@@ -1,6 +1,7 @@
 package com.lf.security.handler;
 
 import com.alibaba.fastjson.JSON;
+import com.lf.security.exception.CaptchaExpection;
 import com.lf.security.exception.CustomerAuthenticationException;
 import com.lf.utils.Result;
 import com.lf.utils.ResultCode;
@@ -48,9 +49,14 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
         } else if (exception instanceof CustomerAuthenticationException) {
             message = exception.getMessage();
             code = ResultCode.NO_LOGIN;
+        } else if (exception instanceof BadCredentialsException) {
+            message = "用户名或密码错误";
+        } else if (exception instanceof CaptchaExpection) {
+            message = exception.getMessage();
         } else {
             message = "登录失败！";
         }
+
         //将错误信息转换成JSON
         String result = JSON.toJSONString(Result.error().code(ResultCode.ERROR).message(message));
         outputStream.write(result.getBytes(StandardCharsets.UTF_8));

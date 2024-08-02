@@ -1,5 +1,5 @@
 import {login, logout, getInfo} from '@/api/user'
-import {getToken, setToken, removeToken,setTokenTime} from '@/utils/auth'
+import {getToken, setToken, removeToken, setTokenTime} from '@/utils/auth'
 import router, {resetRouter} from '@/router'
 
 const state = {
@@ -35,14 +35,14 @@ const mutations = {
 const actions = {
   // 用户登录
   login({commit}, userInfo) {
-  //从用户信息userInfo中解构出用户名和密码
-    const {username, password} = userInfo
+    //从用户信息userInfo中解构出用户名和密码
+    const {username, password, uuid, code} = userInfo
     return new Promise((resolve, reject) => {
       // user login
       //调用src/api/user.js文件中的login()方法
-      login({username: username.trim(), password: password}).then(response => {
+      login({username: username.trim(), password: password, uuid: uuid, code: code}).then(response => {
         //从response中解构出返回的token数据
-        const { token,expireTime } = response
+        const {token, expireTime} = response
         //将返回的token数据保存到store中，作为全局变量使用
         commit('SET_TOKEN', token)
         //将token信息保存到cookie中
@@ -66,7 +66,7 @@ const actions = {
           reject('验证失败，请重新登录。')
         }
 
-        const {roles, name, avatar, introduction,id} = data
+        const {roles, name, avatar, introduction, id} = data
 
         // roles must be a non-empty array
         if (!roles || roles.length <= 0) {
@@ -80,7 +80,7 @@ const actions = {
         //将用户ID保存到Vuex中
         commit('SET_USERUID', id);//用户ID
         //将权限字段保存到sessionStorage中
-        sessionStorage.setItem("codeList",JSON.stringify(roles));
+        sessionStorage.setItem("codeList", JSON.stringify(roles));
         resolve(data);
       }).catch(error => {
         reject(error)

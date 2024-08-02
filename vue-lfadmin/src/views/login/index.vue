@@ -45,6 +45,20 @@
           </span>
         </el-form-item>
       </el-tooltip>
+      <el-form-item prop="code">
+<!--        <svg-icon icon-class="validCode" class="el-input__icon input-icon"/>-->
+        <span class="svg-container">
+            <svg-icon icon-class="validCode"/>
+          </span>
+        <el-input v-model="loginForm.code" auto-complete="off" placeholder="验证码"
+                  style="width: 63%"
+                  @keyup.enter.native="handleLogin">
+
+        </el-input>
+        <div class="login-code">
+          <img :src="codeUrl" @click="getCaptcha">
+        </div>
+      </el-form-item>
 
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;"
                  @click.native.prevent="handleLogin">登录
@@ -55,6 +69,7 @@
 </template>
 
 <script>
+import {getCaptcha} from '@/api/captcha'
 
 export default {
   name: 'Login',
@@ -74,9 +89,12 @@ export default {
       }
     }
     return {
+      codeUrl: '',
       loginForm: {
         username: 'admin',
-        password: '123456'
+        password: '123456',
+        code: '',
+        uuid: ''
       },
       loginRules: {
         username: [{required: true, trigger: 'blur', validator: validateUsername}],
@@ -89,6 +107,9 @@ export default {
       redirect: undefined,
       otherQuery: {}
     }
+  },
+  created() {
+    this.getCaptcha()
   },
   watch: {
     $route: {
@@ -110,6 +131,13 @@ export default {
     }
   },
   methods: {
+    getCaptcha() {
+      getCaptcha().then(res => {
+        this.codeUrl = res.data.base64Image
+        this.loginForm.uuid = res.data.uuid
+      })
+
+    },
     checkCapslock(e) {
       const {key} = e
       this.capsTooltip = key && key.length === 1 && (key >= 'A' && key <= 'Z')
@@ -128,6 +156,7 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
+
           this.$store.dispatch('user/login', this.loginForm)
             .then(() => {
               this.$router.push({path: this.redirect || '/', query: this.otherQuery})
@@ -198,6 +227,7 @@ $cursor: #fff;
     border-radius: 5px;
     color: #454545;
   }
+
 }
 </style>
 <style lang="scss">
@@ -227,6 +257,7 @@ $cursor: #fff;
 
       .el-input {
         height: 38px;
+
         input {
           height: 38px;
           color: #000; /* 使输入框中的字体变成黑色 */
@@ -281,6 +312,18 @@ $cursor: #fff;
     }
   }
 }
+
+.login-code {
+  width: 30%;
+  display: inline-block;
+  height: 40px;
+  float: right;
+  img{
+    cursor: pointer;
+    vertical-align:middle
+  }
+}
+
 </style>
 
 

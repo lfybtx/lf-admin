@@ -100,7 +100,7 @@ service.interceptors.response.use(
         type: 'error',
         duration: 5 * 1000
       })
-      if (res.code === 500) {
+      if (res.code === 500&&res.message==="登录用户已过期，请重新登录！") {
         MessageBox.confirm('用户登录信息过期，请重新登录！', '系统提示', {
           confirmButtonText: '登录',
           cancelButtonText: '取消',

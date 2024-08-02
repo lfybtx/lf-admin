@@ -36,5 +36,16 @@
             <version>2.4</version>
         </dependency>
         <!-- 阿里云OSS文件上传结束 -->
+        <!--谷歌的验证码图片生成器-->
+        <dependency>
+            <groupId>com.github.axet</groupId>
+            <artifactId>kaptcha</artifactId>
+            <version>0.0.9</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>5.3.3</version>
+        </dependency>
     </dependencies>
 </project>

@@ -60,5 +60,7 @@ jwt:
   expiration: 180000
 
 request:
+  captcha:
+    url: /captcha
   login:
     url: /api/user/login

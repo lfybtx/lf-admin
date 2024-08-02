@@ -49,9 +49,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.formLogin()
                 .loginProcessingUrl("/api/user/login")
-// 设置登录验证成功或失败后的的跳转地址
+                // 设置登录验证成功或失败后的的跳转地址
                 .successHandler(loginSuccessHandler).failureHandler(loginFailureHandler)
-// 禁用csrf防御机制
+                // 禁用csrf防御机制
                 .and().csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()

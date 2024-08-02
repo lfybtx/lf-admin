@@ -1,5 +1,5 @@
 import {login, logout, getInfo} from '@/api/user'
-import {getToken, setToken, removeToken} from '@/utils/auth'
+import {getToken, setToken, removeToken,setTokenTime} from '@/utils/auth'
 import router, {resetRouter} from '@/router'
 
 const state = {
@@ -41,11 +41,13 @@ const actions = {
       // user login
       //调用src/api/user.js文件中的login()方法
       login({username: username.trim(), password: password}).then(response => {
-    //从response中解构出返回的token数据
-        const {token} = response
-    //将返回的token数据保存到store中，作为全局变量使用
+        //从response中解构出返回的token数据
+        const { token,expireTime } = response
+        //将返回的token数据保存到store中，作为全局变量使用
         commit('SET_TOKEN', token)
-    //将token信息保存到cookie中
+        //将token信息保存到cookie中
+        //设置token过期时间
+        setTokenTime(expireTime);
         setToken(token)
         resolve()
       }).catch(error => {

@@ -27,6 +27,7 @@ public interface UserService extends IService<User> {
 
     /**
      * 分页查询用户信息
+     *
      * @param page
      * @param userQueryVo
      * @return
@@ -34,4 +35,21 @@ public interface UserService extends IService<User> {
     IPage<User> findUserListByPage(IPage<User> page, UserQueryVo userQueryVo);
 
     public List<Department> findDepartmentList(Department department);
+
+    /**
+     * 删除用户信息
+     *
+     * @param id
+     * @return
+     */
+    boolean deleteById(Long id);
+
+    /**
+     * 分配角色
+     *
+     * @param userId
+     * @param roleIds
+     * @return
+     */
+    boolean saveUserRole(Long userId, List<Long> roleIds);
 }

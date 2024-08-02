@@ -31,6 +31,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     @Autowired
     private UserMapper userMapper;
 
+
     @Override
     public IPage<Role> findRoleListByUserId(IPage<Role> page, RoleQueryVo roleQueryVo) {
         //创建条件构造器
@@ -76,5 +77,16 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     @Override
     public List<Long> findUserIdByRoleId(Long roleId) {
         return baseMapper.findUserIdByRoleId(roleId);
+    }
+
+    /**
+     * 根据用户ID查询该用户拥有的角色ID
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<Long> findRoleIdByUserId(Long userId) {
+        return baseMapper.findRoleIdByUserId(userId);
     }
 }

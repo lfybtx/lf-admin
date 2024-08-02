@@ -61,14 +61,14 @@ const actions = {
         const {data} = response
 
         if (!data) {
-          reject('Verification failed, please Login again.')
+          reject('验证失败，请重新登录。')
         }
 
         const {roles, name, avatar, introduction,id} = data
 
         // roles must be a non-empty array
         if (!roles || roles.length <= 0) {
-          reject('getInfo: roles must be a non-null array!')
+          reject('该用户未分配角色，无法登录')
         }
 
         commit('SET_ROLES', roles)

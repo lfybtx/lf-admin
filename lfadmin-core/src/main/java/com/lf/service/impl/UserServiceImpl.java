@@ -7,8 +7,10 @@ import com.lf.entity.Department;
 import com.lf.entity.User;
 import com.lf.dao.UserMapper;
 import com.lf.entity.vo.UserQueryVo;
+import com.lf.service.FileService;
 import com.lf.service.UserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.lf.utils.SystemConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +35,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Autowired
     DepartmentMapper departmentMapper;
 
+    @Autowired
+    FileService fileService;
     /**
      * 根据用户名查询用户信息
      * @param userName
@@ -93,6 +97,33 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         findAllChildDepartments(allDepartments, departmentId, result);
         result.add(department);
         return result;
+    }
+
+    @Override
+    public boolean deleteById(Long id) {
+        //查询
+        User user = baseMapper.selectById(id);
+        //删除用户角色关系
+        baseMapper.deleteUserRole(id);
+        //删除用户
+        if (baseMapper.deleteById(id) > 0) {
+            //判断用户是否存在
+            if (user != null && !ObjectUtils.isEmpty(user.getAvatar())
+                    && !user.getAvatar().equals(SystemConstants.DEFAULT_AVATAR)) {
+                //删除文件
+                fileService.deleteFile(user.getAvatar());
+            }
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean saveUserRole(Long userId, List<Long> roleIds) {
+        //删除该用户对应的角色信息
+        baseMapper.deleteUserRole(userId);
+        //保存用户角色信息
+        return baseMapper.saveUserRole(userId,roleIds)>0;
     }
 
     private void findAllChildDepartments(List<Department> allDepartments, Long parentId, List<Department> result) {

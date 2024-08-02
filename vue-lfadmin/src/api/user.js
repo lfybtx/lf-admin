@@ -15,6 +15,44 @@ export default {
    */
   async addUser(params){
     return await http.post("/api/user/add",params);
+  },
+  /**
+   * 编辑用户
+   * @param params
+   * @returns
+   */
+  async updateUser(params){
+    return await http.put("/api/user/update",params);
+  },
+  /**
+   * 删除用户
+   * @param params
+   * @returns
+   */
+  async deleteUser(params){
+    return await http.delete("/api/user/delete",params);
+  },
+  /**
+   * 查询用户角色列表
+   * @param params
+   * @returns
+   */
+  async getAssignRoleList(params){
+    return await http.get("/api/user/getRoleListForAssign",params);
+  },
+  /**
+   * 获取分配角色列表数据
+   * @param params
+   * @returns
+   */
+  async getRoleIdByUserId(params){
+    return await http.getRestApi("/api/user/getRoleByUserId",params);
+  },
+  /**
+   * 分配角色
+   */
+  async assignRoleSave(params){
+    return await http.post("/api/user/saveUserRole",params)
   }
 }
 /**

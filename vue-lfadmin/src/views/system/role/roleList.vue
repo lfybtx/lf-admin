@@ -24,6 +24,7 @@
       border
       stripe
       style="width: 100%; margin-bottom: 10px"
+      empty-text="非管理员，只能查看本用户创建的角色"
     >
       <el-table-column
         prop="id"

@@ -198,7 +198,49 @@
           </el-tree>
         </div>
       </system-dialog>
-
+      <!-- 分配角色窗口 -->
+      <system-dialog
+        :title="assignDialog.title"
+        :height="assignDialog.height"
+        :width="assignDialog.width"
+        :visible="assignDialog.visible"
+        @onClose="onAssignClose"
+        @onConfirm="onAssignConfirm"
+      >
+        <div slot="content">
+          <!-- 分配角色数据列表 -->
+          <el-table
+            ref="assignRoleTable"
+            :data="assignRoleList"
+            border
+            stripe
+            :height="assignHeight"
+            style="width: 100%; margin-bottom: 10px"
+            @selection-change="handleSelectionChange"
+          >
+            <el-table-column
+              type="selection"
+              width="55"
+              align="center"
+            ></el-table-column>
+            <el-table-column prop="roleCode" label="角色编码"/>
+            <el-table-column prop="roleName" label="角色名称"/>
+            <el-table-column prop="remark" label="角色备注"/>
+          </el-table>
+          <!-- 分页工具栏 -->
+          <el-pagination
+            @size-change="assignSizeChange"
+            @current-change="assignCurrentChange"
+            :current-page.sync="roleVo.pageNo"
+            :page-sizes="[10, 20, 30, 40, 50]"
+            :page-size="roleVo.pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="roleVo.total"
+            background
+          >
+          </el-pagination>
+        </div>
+      </system-dialog>
     </el-main>
   </el-container>
 </template>
@@ -213,6 +255,7 @@ import SystemDialog from '@/components/System/SystemDialog.vue'
 
 //导入token
 import {getToken} from '@/utils/auth'
+
 export default {
   name: 'userList',
   components: {SystemDialog},
@@ -231,7 +274,7 @@ export default {
     }
     return {
       //上传需要携带的数据
-      uploadHeader:{"token":getToken()},
+      uploadHeader: {"token": getToken()},
       //查询条件对象
       searchModel: {
         username: "",
@@ -273,7 +316,11 @@ export default {
         password: '',
         username: '',
         gender: '',
-        avatar: ''
+        avatar: '',
+        isAccountNonExpired: '1',
+        isAccountNonLocked: '1',
+        isCredentialsNonExpired: '1',
+        isEnabled: '1',
       },
       rules: {
         departmentName: [{required: true, trigger: 'change', message: '请选择所属部门'}],
@@ -296,6 +343,24 @@ export default {
         label: 'departmentName'
       },
       parentList: [], //所属部门节点数据
+      //分配角色窗口属性
+      assignDialog: {
+        title: "",
+        visible: false,
+        width: 800,
+        height: 410,
+      },
+      //角色对象
+      roleVo: {
+        pageNo: 1,
+        pageSize: 10,
+        userId: "",
+        total: 0,
+      },
+      assignRoleList: [], //角色列表
+      assignHeight: 0, //分配角色表格高度
+      selectedIds: [], //被选中的角色id
+      selectedUserId: "", //被分配角色的用户ID
     }
   },
   methods: {
@@ -385,6 +450,16 @@ export default {
     }
     ,
     /**
+     * 编辑用户
+     */
+    handleEdit(row) {
+      //设置弹框属性
+      this.userDialog.title = '编辑用户'
+      this.userDialog.visible = true
+      //把当前编辑的数据复制到表单数据域，供回显使用
+      this.$objCopy(row, this.user)
+    },
+    /**
      * 新增或编辑取消事件
      */
     onClose() {
@@ -405,6 +480,8 @@ export default {
             res = await userApi.addUser(this.user)
           } else {
             //发送修改请求
+            //发送修改请求
+            res = await userApi.updateUser(this.user)
           }
           //判断是否成功
           if (res.success) {
@@ -482,6 +559,138 @@ export default {
         this.$message.error('上传头像图片大小不能超过 10MB!')
       }
       return isJPG && isLt10M
+    },
+    /**
+     * 删除
+     */
+    async handleDelete(row) {
+      let confirm = await this.$myconfirm('确定要删除该数据吗?')
+      if (confirm) {
+        //封装条件
+        let params = { id: row.id }
+        //发送删除请求
+        let res = await userApi.deleteUser(params)
+        //判断是否成功
+        if (res.success) {
+          this.$message.success(res.message)
+          //刷新
+          this.search(this.departmentId, this.pageNo, this.pageSize);
+        } else {
+          this.$message.error(res.message)
+        }
+      }
+    },
+    /**
+     * 打开分配角色
+     */
+    async assignRole(row){
+      //防止回显出现问题
+      this.selectedIds = [];
+      this.selectedUserId = "";
+      //被分配用户的id
+      this.selectedUserId = row.id;
+      //显示窗口
+      this.assignDialog.visible = true;
+      //设置标题
+      this.assignDialog.title = `给【${row.realName}】分配角色`;
+      //查询当前登录用户的所有角色信息
+      await this.getAssignRoleList();
+      //获取当前被分配用户的ID
+      let params = {
+        userId: row.id,
+      };
+      //发送根据用户ID查询角色列表的请求
+      let res = await userApi.getRoleIdByUserId(params);
+      //如果存在数据
+      if (res.success && res.data){
+        //将查询到的角色ID列表交给选中角色数组
+        this.selectedIds = res.data;
+        //循环遍历
+        this.selectedIds.forEach((key) => {
+          this.assignRoleList.forEach((item) => {
+            if (item.id === key) {
+              this.$refs.assignRoleTable.toggleRowSelection(item, true);
+            }
+          });
+        });
+      }
+    },
+    /**
+     * 查询当前登录用户的所有角色信息
+     */
+    async getAssignRoleList(pageNo = 1, pageSize = 10) {
+      //给用户ID赋值
+      this.roleVo.userId = this.$store.getters.userId;
+      this.roleVo.pageNo = pageNo;
+      this.roleVo.pageSize = pageSize;
+      //发送查询请求
+      let res = await userApi.getAssignRoleList(this.roleVo);
+      //判断是否成功
+      if (res.success) {
+        //角色列表赋值
+        this.assignRoleList = res.data.records;
+        //角色总数量赋值
+        this.roleVo.total = res.data.total;
+      }
+    },
+    /**
+     * 分配角色取消事件
+     */
+    onAssignClose(){
+      //隐藏窗口
+      this.assignDialog.visible = false;
+    },
+    /**
+     * 当每页数量发生变化时触发该事件
+     */
+    assignSizeChange(size){
+      this.roleVo.pageSize = size; //将每页显示的数量交给成员变量
+      this.getAssignRoleList(this.roleVo.pageNo, size);
+    },
+    /**
+     * 当页码发生变化时触发该事件
+     */
+    assignCurrentChange(page){
+      this.roleVo.pageNo = page;
+      //调用查询方法
+      this.getAssignRoleList(page, this.roleVo.pageSize);
+    },
+    /**
+     * 当点击多选框时触发该事件
+     */
+    handleSelectionChange(rows){
+      let roleIds = [];
+      //循环遍历选中的角色ID
+      for (let i = 0; i < rows.length; i++) {
+      //将当前选中的角色ID放到数组中
+        roleIds.push(rows[i].id);
+      }
+      //将选中的角色ID交给成员变量
+      this.selectedIds = roleIds;
+    },
+    /**
+     * 分配角色确认事件
+     */
+    async onAssignConfirm(){
+      //判断用户是否有选中角色
+      if (this.selectedIds.length === 0) {
+        this.$message.warning("请选择要分配的角色！");
+        return;
+      }
+      let params = {
+        userId: this.selectedUserId,
+        roleIds: this.selectedIds,
+      };
+      //发送请求
+      let res = await userApi.assignRoleSave(params);
+      //判断是否成功
+      if (res.success) {
+        this.$message.success(res.message);
+        //关闭窗口
+        this.assignDialog.visible = false;
+      } else {
+        this.$message.error(res.message);
+      }
     }
   }
   ,
@@ -498,6 +707,8 @@ export default {
       this.containerHeight = window.innerHeight - 85;
       //表格高度
       this.tableHeight = window.innerHeight - 220;
+      //角色表格高度
+      this.assignHeight = window.innerHeight - 350;
     });
   }
 }
@@ -510,7 +721,7 @@ export default {
   align-items: center;
 }
 
-  /*用户头像*/
+/*用户头像*/
 .avatar-uploader .el-upload {
   border: 1px dashed #d9d9d9 !important;
   border-radius: 6px;

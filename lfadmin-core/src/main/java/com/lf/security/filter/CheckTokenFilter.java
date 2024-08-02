@@ -75,7 +75,7 @@ public class CheckTokenFilter extends OncePerRequestFilter {
         String redisToken = redisService.get(tokenKey);
         //如果redis里面没有token,说明该token失效
         if (ObjectUtils.isEmpty(redisToken)) {
-            throw new CustomerAuthenticationException("登录已过期，请重新登录");
+            throw new CustomerAuthenticationException("登录用户已过期，请重新登录！");
         }
         //如果token和Redis中的token不一致，则验证失败
         if (!token.equals(redisToken)) {

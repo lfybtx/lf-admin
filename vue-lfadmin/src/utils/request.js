@@ -1,24 +1,25 @@
 import axios from 'axios'
-import { MessageBox, Message } from 'element-ui'
+import {MessageBox, Message} from 'element-ui'
 import store from '@/store'
-import { getToken,setToken,clearStorage,getTokenTime,setTokenTime,removeTokenTime} from '@/utils/auth'
+import {getToken, setToken, clearStorage, getTokenTime, setTokenTime, removeTokenTime} from '@/utils/auth'
 import qs from 'qs'
-import { refreshTokenApi } from '@/api/user'
+import {refreshTokenApi} from '@/api/user'
 // 创建一个 axios 实例
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = 基础 url + 请求 url
   // withCredentials: true, // 当跨域请求时发送 cookies
   timeout: 5000 // 请求超时时间
 })
+
 /**
  * 刷新token
  */
-function refreshTokenInfo(){
+function refreshTokenInfo() {
 //设置请求参数
   let param = {
-    token:getToken()
+    token: getToken()
   }
-  return refreshTokenApi(param).then(res=>res);
+  return refreshTokenApi(param).then(res => res);
 }
 
 //定义变量，标识是否刷新token
@@ -30,30 +31,30 @@ service.interceptors.request.use(
     let currentTime = new Date().getTime();
     //获取token过期时间
     let expireTime = getTokenTime();
-    if(expireTime>0){
+    if (expireTime > 0) {
       //计算时间
       let min = (expireTime - currentTime) / 1000 / 60;
       //如果token离过期时间相差3分钟，则刷新token
-      if(min<3){
+      if (min < 3) {
         //判断是否刷新
-        if(!isRefresh){
+        if (!isRefresh) {
           //标识刷新
           isRefresh = true;
           //调用刷新token的方法
-          return refreshTokenInfo().then(res=>{
+          return refreshTokenInfo().then(res => {
             //判断是否成功
-            if(res.success){
+            if (res.success) {
               //设置新的token和过期时间
               setToken(res.data.token);
               setTokenTime(res.data.expireTime);
               //将新的token添加到header头部
               config.headers.token = getToken();
-              console.log("----------------------------------------"+min)
+              console.log("----------------------------------------" + min)
 
             }
             return config;
-          }).catch(error=>{
-          }).finally(()=>{
+          }).catch(error => {
+          }).finally(() => {
             //修改是否刷新token的状态
             isRefresh = false;
           });
@@ -74,6 +75,7 @@ service.interceptors.request.use(
     //清空token过期时间
     removeTokenTime();
     // do something with request error
+    console.log("111111111111111111111111111")
     return Promise.reject(error)
   }
 )
@@ -91,17 +93,15 @@ service.interceptors.response.use(
    */
   response => {
     const res = response.data
-    // 如果自定义代码不是 200，则判断为错误。
+// if the custom code is not 200, it is judged as an error.
     if (res.code !== 200) {
       Message({
-        message: res.message || '错误',
+        message: res.message || 'Error',
         type: 'error',
         duration: 5 * 1000
       })
-
-      // 50008: 非法令牌; 50012: 其他客户端登录了; 50014: 令牌过期;
-      if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
-          MessageBox.confirm('用户登录信息过期，请重新登录！', '系统提示', {
+      if (res.code === 500) {
+        MessageBox.confirm('用户登录信息过期，请重新登录！', '系统提示', {
           confirmButtonText: '登录',
           cancelButtonText: '取消',
           type: 'warning'
@@ -115,22 +115,22 @@ service.interceptors.response.use(
           })
         })
       }
-      return Promise.reject(new Error(res.message || '错误'))
+      return Promise.reject(new Error(res.message || 'Error'))
     } else {
       return res
     }
   },
   error => {
-    console.log('错误' + error) // 用于调试
-    //清空sessionStorage
+//清空sessionStorage
     clearStorage();
-    //清空token过期时间
+//清空token过期时间
     removeTokenTime();
-    Message({
-      message: error.message,
-      type: 'error',
-      duration: 5 * 1000
-    })
+    // Message({
+    //   message: error.message,
+    //   type: 'error',
+    //   duration: 5 * 1000
+    // })
+    console.log(error.message)
     return Promise.reject(error)
   }
 )

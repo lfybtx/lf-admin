@@ -74,7 +74,7 @@ public class RoleController {
      * @return
      */
     @PutMapping("/update")
-    @PreAuthorize("hasAuthority('sys:role:update')")
+    @PreAuthorize("hasAuthority('sys:role:edit')")
     public Result update(@RequestBody Role role) {
         if (roleService.updateById(role)) {
             return Result.ok().message("角色修改成功");

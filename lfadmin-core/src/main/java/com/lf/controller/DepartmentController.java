@@ -69,7 +69,7 @@ public class DepartmentController {
      * @return
      */
     @PutMapping("/update")
-    @PreAuthorize("hasAuthority('sys:department:update')")
+    @PreAuthorize("hasAuthority('sys:department:edit')")
     public Result update(@RequestBody Department department){
         if(departmentService.updateById(department)){
             return Result.ok().message("部门修改成功");

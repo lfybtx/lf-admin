@@ -1,13 +1,9 @@
 package com.lf.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
-
-import java.time.LocalDateTime;
-import java.io.Serializable;
-import java.util.Date;
-
 import lombok.Data;
-import lombok.EqualsAndHashCode;
+
+import java.util.Date;
 
 /**
  * <p>
@@ -15,33 +11,25 @@ import lombok.EqualsAndHashCode;
  * </p>
  *
  * @author lfybtx
- * @since 2024-07-27
+ * @since 2024-08-03
  */
 @Data
-@TableName("sys_role")
-public class Role implements Serializable {
+@TableName("sys_job")
+public class Job {
+
+
     private static final long serialVersionUID = 1L;
 
     /**
-     * 角色编号
+     * 岗位编号
      */
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     /**
-     * 角色编码
+     * 岗位名称
      */
-    private String roleCode;
-
-    /**
-     * 角色名称
-     */
-    private String roleName;
-
-    /**
-     * 创建人
-     */
-    private Long createUser;
+    private String jobName;
 
     /**
      * 创建时间
@@ -56,14 +44,12 @@ public class Role implements Serializable {
     private Date updateTime;
 
     /**
-     * 备注
-     */
-    private String remark;
-
-    /**
      * 是否删除(0-未删除，1-已删除)
      */
     private Integer isDelete;
 
-
+    /**
+     * 备注
+     */
+    private String remark;
 }

@@ -26,6 +26,14 @@ public interface UserMapper extends BaseMapper<User> {
     int deleteUserRole(Long userId);
 
     /**
+     * 删除用户岗位关系
+     * @param userId
+     * @return
+     */
+    @Delete("delete from sys_job_user where user_id=#{userId}")
+    int deleteUserJob(Long userId);
+
+    /**
      * 保存用户角色关系
      * @param userId
      * @param roleIds

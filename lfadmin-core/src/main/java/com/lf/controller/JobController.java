@@ -84,7 +84,7 @@ public class JobController {
      * @return
      */
     @DeleteMapping("/delete/{id}")
-    @PreAuthorize("hasAuthority('sys:role:delete')")
+    @PreAuthorize("hasAuthority('sys:job:delete')")
     public Result delete(@PathVariable Long id) {
         List<Long> userIdByJobId = jobService.findUserIdByJobId(id);
         if (userIdByJobId.size()>0){

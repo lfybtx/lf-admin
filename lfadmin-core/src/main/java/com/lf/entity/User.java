@@ -82,6 +82,17 @@ public class User implements Serializable , UserDetails {
     /**
      * 所属部门ID
      */
+    @TableField("job_id")
+    private Long jobId;
+
+    /**
+     * 所属部门名称
+     */
+    @TableField("job_name")
+    private String jobName;
+    /**
+     * 所属部门ID
+     */
     @TableField("department_id")
     private Long departmentId;
 

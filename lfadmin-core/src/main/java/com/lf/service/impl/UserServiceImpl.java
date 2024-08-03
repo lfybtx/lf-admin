@@ -8,6 +8,7 @@ import com.lf.entity.User;
 import com.lf.dao.UserMapper;
 import com.lf.entity.vo.UserQueryVo;
 import com.lf.service.FileService;
+import com.lf.service.JobService;
 import com.lf.service.UserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lf.utils.SystemConstants;
@@ -35,6 +36,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Autowired
     DepartmentMapper departmentMapper;
 
+    @Autowired
+    JobService jobService;
     @Autowired
     FileService fileService;
     /**
@@ -73,6 +76,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (!departmentIds.isEmpty()) {
             queryWrapper.in("department_id", departmentIds);
         }
+
         //用户名
         queryWrapper.like(!ObjectUtils.isEmpty(userQueryVo.getUsername()),
                 "username",userQueryVo.getUsername());
@@ -87,7 +91,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public List<Department> findDepartmentList(Department department) {
+    public List<Department>
+    findDepartmentList(Department department) {
         // 查找指定departmentId的部门
         Long departmentId = department.getId();
         List<Department> allDepartments = departmentMapper.selectList(null); // 获取所有部门

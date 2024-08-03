@@ -16,6 +16,6 @@
         id, job_name, create_time, update_time, is_delete
     </sql>
     <select id="findUserIdByJobId" resultType="java.lang.Long">
-        select user_id from sys_job_user where job_id=#{jobId}
+        select id from sys_user where job_id=#{jobId}
     </select>
 </mapper>

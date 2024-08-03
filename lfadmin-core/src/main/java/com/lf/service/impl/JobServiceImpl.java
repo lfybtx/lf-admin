@@ -39,4 +39,5 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
     public List<Long> findUserIdByJobId(Long id) {
         return baseMapper.findUserIdByJobId(id);
     }
+
 }

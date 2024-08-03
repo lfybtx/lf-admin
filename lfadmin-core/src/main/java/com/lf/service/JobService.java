@@ -25,4 +25,6 @@ public interface JobService extends IService<Job> {
      * @return
      */
     List<Long> findUserIdByJobId(Long id);
+
+
 }

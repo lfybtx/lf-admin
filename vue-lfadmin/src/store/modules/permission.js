@@ -71,6 +71,19 @@ const actions = {
         if (res.code === 200) {
           accessedRoutes = filterAsyncRoutes(res.data, roles)
         }
+        // 将 icons 路由添加到末尾
+        accessedRoutes.push({
+          path: '/icon',
+          component: Layout,
+          children: [
+            {
+              path: 'index',
+              component: () => import('@/views/icons/index'),
+              name: 'Icons',
+              meta: { title: 'Icons', icon: 'icon', noCache: true }
+            }
+          ]
+        });
         //将路由信息保存到store中
         commit("SET_ROUTES", accessedRoutes);
         resolve(accessedRoutes);

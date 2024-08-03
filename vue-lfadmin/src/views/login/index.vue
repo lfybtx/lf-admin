@@ -45,20 +45,24 @@
           </span>
         </el-form-item>
       </el-tooltip>
-      <el-form-item prop="code">
-<!--        <svg-icon icon-class="validCode" class="el-input__icon input-icon"/>-->
-        <span class="svg-container">
-            <svg-icon icon-class="validCode"/>
-          </span>
-        <el-input v-model="loginForm.code" auto-complete="off" placeholder="验证码"
-                  style="width: 63%"
-                  @keyup.enter.native="handleLogin">
 
-        </el-input>
+      <div class="captcha-container">
+        <el-form-item prop="code" class="code-item">
+          <span class="svg-container">
+            <svg-icon icon-class="安全A-1"/>
+          </span>
+          <el-input
+            v-model="loginForm.code"
+            auto-complete="off"
+            placeholder="验证码"
+            class="code-input"
+            @keyup.enter.native="handleLogin"
+          />
+        </el-form-item>
         <div class="login-code">
           <img :src="codeUrl" @click="getCaptcha">
         </div>
-      </el-form-item>
+      </div>
 
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;"
                  @click.native.prevent="handleLogin">登录
@@ -69,7 +73,7 @@
 </template>
 
 <script>
-import {getCaptcha} from '@/api/captcha'
+import { getCaptcha } from '@/api/captcha'
 
 export default {
   name: 'Login',
@@ -97,8 +101,8 @@ export default {
         uuid: ''
       },
       loginRules: {
-        username: [{required: true, trigger: 'blur', validator: validateUsername}],
-        password: [{required: true, trigger: 'blur', validator: validatePassword}]
+        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
+        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
       },
       passwordType: 'password',
       capsTooltip: false,
@@ -136,10 +140,9 @@ export default {
         this.codeUrl = res.data.base64Image
         this.loginForm.uuid = res.data.uuid
       })
-
     },
     checkCapslock(e) {
-      const {key} = e
+      const { key } = e
       this.capsTooltip = key && key.length === 1 && (key >= 'A' && key <= 'Z')
     },
     showPwd() {
@@ -159,11 +162,12 @@ export default {
 
           this.$store.dispatch('user/login', this.loginForm)
             .then(() => {
-              this.$router.push({path: this.redirect || '/', query: this.otherQuery})
+              this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
               this.loading = false
             })
             .catch(() => {
               this.loading = false
+              this.getCaptcha()
             })
         } else {
           console.log('error submit!!')
@@ -184,9 +188,6 @@ export default {
 </script>
 
 <style lang="scss">
-/* 修复input 背景不协调 和光标变色 */
-/* Detail see https://github.com/lfybtx/lf-admin/pull/927 */
-
 $bg: #283443;
 $light_gray: #fff;
 $cursor: #fff;
@@ -197,40 +198,6 @@ $cursor: #fff;
   }
 }
 
-/* reset element-ui css */
-.login-container {
-  .el-input {
-    display: inline-block;
-    height: 47px;
-    width: 85%;
-
-    input {
-      background: transparent;
-      border: 0px;
-      -webkit-appearance: none;
-      border-radius: 0px;
-      padding: 12px 5px 12px 15px;
-      color: $light_gray;
-      height: 47px;
-      caret-color: $cursor;
-
-      &:-webkit-autofill {
-        box-shadow: 0 0 0px 1000px $bg inset !important;
-        -webkit-text-fill-color: $cursor !important;
-      }
-    }
-  }
-
-  .el-form-item {
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-    color: #454545;
-  }
-
-}
-</style>
-<style lang="scss">
 .login-container {
   display: flex;
   justify-content: center;
@@ -254,23 +221,61 @@ $cursor: #fff;
     .el-form-item {
       width: 100%;
       margin-bottom: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(0, 0, 0, 0.1);
+      border-radius: 5px;
+      color: #454545;
 
       .el-input {
         height: 38px;
+        width: 85%;
+        display: inline-block;
 
         input {
           height: 38px;
           color: #000; /* 使输入框中的字体变成黑色 */
           background: transparent;
-          caret-color: #000
+          caret-color: #000;
+          border: 0;
+          -webkit-appearance: none;
+          border-radius: 0;
+          padding: 12px 5px 12px 15px;
+
+          &:-webkit-autofill {
+            box-shadow: 0 0 0px 1000px $bg inset !important;
+            -webkit-text-fill-color: $cursor !important;
+          }
         }
       }
 
       .svg-container {
         margin-left: 10px;
         vertical-align: middle;
-        width: 20px;
+        width: 15px;
         display: inline-block;
+      }
+    }
+
+    .captcha-container {
+      display: flex;
+      align-items: center;
+      width: 100%;
+
+      .code-item {
+        flex: 1;
+      }
+
+      .login-code {
+        flex: 0 0 43%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: -20px;
+        margin-left: -10px;
+        margin-right: -12px;
+        img {
+          cursor: pointer;
+        }
       }
     }
 
@@ -312,19 +317,4 @@ $cursor: #fff;
     }
   }
 }
-
-.login-code {
-  width: 30%;
-  display: inline-block;
-  height: 40px;
-  float: right;
-  img{
-    cursor: pointer;
-    vertical-align:middle
-  }
-}
-
 </style>
-
-
-

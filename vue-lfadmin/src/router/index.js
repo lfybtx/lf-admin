@@ -102,7 +102,7 @@ export const constantRoutes = [
   //       path: 'index',
   //       component: () => import('@/views/icons/index'),
   //       name: 'Icons',
-  //       meta: { title: 'Icons', icon: 'icon', noCache: true }
+  //       meta: { title: '图标库', icon: 'icon', noCache: true }
   //     }
   //   ]
   // },

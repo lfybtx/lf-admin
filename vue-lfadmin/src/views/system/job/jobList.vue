@@ -135,7 +135,7 @@ export default {
       jobDialog: {
         title: '',
         visible: false,
-        height: 230,
+        height: 130,
         width: 500
       },
       //岗位对象

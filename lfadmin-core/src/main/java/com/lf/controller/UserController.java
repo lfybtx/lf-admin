@@ -55,6 +55,47 @@ public class UserController {
     }
 
     /**
+     * 查询个人信息
+     * @param userId
+     * @return
+     */
+    @GetMapping("/getMe")
+    public Result getMe(Long userId){
+        User user = userService.getById(userId);
+        if(Objects.isNull(user)){
+            return Result.error();
+        }
+        return Result.ok(user);
+    }
+
+    /**
+     * 修改个人信息
+     * @param user
+     * @return
+     */
+    @PutMapping("/updateMe")
+    public Result updateMe(@RequestBody User user){
+        if(userService.updateById(user)){
+            return Result.ok().message("修改成功");
+        }
+        return Result.error().message("修改失败");
+    }
+
+    /**
+     * 修改个人密码
+     * @param user
+     * @return
+     */
+    @PutMapping("/updatePassword")
+    public Result updatePassword(@RequestBody User user){
+        //密码加密
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        if(userService.updateById(user)){
+            return Result.ok().message("修改成功");
+        }
+        return Result.error().message("修改失败");
+    }
+    /**
      * 查询用户列表
      *
      * @param userQueryVo

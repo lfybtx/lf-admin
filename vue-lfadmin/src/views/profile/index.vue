@@ -1,28 +1,23 @@
+// Parent Component
 <template>
   <div class="app-container">
     <div v-if="user">
       <el-row :gutter="20">
-
         <el-col :span="6" :xs="24">
-          <user-card :user="user" />
+          <user-card :user="user" :role="roleArray" />
         </el-col>
-
         <el-col :span="18" :xs="24">
           <el-card>
             <el-tabs v-model="activeTab">
-              <el-tab-pane label="Activity" name="activity">
+              <el-tab-pane label="活动" name="activity">
                 <activity />
               </el-tab-pane>
-              <el-tab-pane label="Timeline" name="timeline">
-                <timeline />
-              </el-tab-pane>
-              <el-tab-pane label="Account" name="account">
+              <el-tab-pane label="个人设置" name="account">
                 <account :user="user" />
               </el-tab-pane>
             </el-tabs>
           </el-card>
         </el-col>
-
       </el-row>
     </div>
   </div>
@@ -32,36 +27,30 @@
 import { mapGetters } from 'vuex'
 import UserCard from './components/UserCard'
 import Activity from './components/Activity'
-import Timeline from './components/Timeline'
 import Account from './components/Account'
+import userApi from '@/api/user'
 
 export default {
   name: 'Profile',
-  components: { UserCard, Activity, Timeline, Account },
+  components: { UserCard, Activity, Account },
   data() {
     return {
       user: {},
-      activeTab: 'activity'
+      activeTab: 'activity',
+      roleArray: []
     }
   },
   computed: {
-    ...mapGetters([
-      'name',
-      'avatar',
-      'roles'
-    ])
+    ...mapGetters(['roles', 'userId'])
   },
   created() {
     this.getUser()
   },
   methods: {
-    getUser() {
-      this.user = {
-        name: this.name,
-        role: this.roles.join(' | '),
-        email: 'admin@test.com',
-        avatar: this.avatar
-      }
+    async getUser() {
+      let userId = this.userId
+      this.user = (await userApi.getMe({ userId })).data
+      this.roleArray = this.roles // Ensure roleArray is an array
     }
   }
 }

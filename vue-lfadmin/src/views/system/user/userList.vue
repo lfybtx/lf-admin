@@ -73,6 +73,7 @@
         <el-table-column prop="username" label="用户名" align="center"></el-table-column>
         <el-table-column prop="realName" label="姓名" align="center"></el-table-column>
         <el-table-column prop="departmentName" label="所属部门" align="center"></el-table-column>
+        <el-table-column prop="jobName" label="岗位" align="center"></el-table-column>
         <el-table-column prop="phone" label="电话" align="center"></el-table-column>
         <el-table-column prop="email" label="邮箱" align="center"></el-table-column>
         <el-table-column align="center" width="290" label="操作">
@@ -151,6 +152,20 @@
               </el-radio-group>
             </el-form-item>
             <br>
+            <el-form-item label="岗位" prop="jobs">
+              <el-select
+                v-model="user.jobName"
+                style="width: 178px"
+                placeholder="请选择"
+              >
+                <el-option
+                  v-for="item in jobs"
+                  :key="item.jobName"
+                  :label="item.jobName"
+                  :value="item.jobName"
+                />
+              </el-select>
+            </el-form-item>
             <!-- 用户头像 -->
             <el-form-item label="头像">
               <el-upload
@@ -252,7 +267,8 @@ import departmentApi from '@/api/department';
 import userApi from '@/api/user';
 //导入对话框组件
 import SystemDialog from '@/components/System/SystemDialog.vue'
-
+//导入岗位api脚本
+import jobApi from '@/api/job'
 //导入token
 import {getToken} from '@/utils/auth'
 
@@ -273,6 +289,7 @@ export default {
       }
     }
     return {
+      jobs: [],
       //上传需要携带的数据
       uploadHeader: {"token": getToken()},
       //查询条件对象
@@ -308,6 +325,8 @@ export default {
       user: {
         id: '',
         departmentId: '',
+        jobId: '',
+        jobName: '',
         departmentName: '',
         email: '',
         realName: '',
@@ -447,6 +466,7 @@ export default {
       this.$resetForm('userForm', this.user) //清空表单
       this.userDialog.visible = true //显示窗口
       this.userDialog.title = '新增用户' //设置标题
+      this.jobDatas = ''
     }
     ,
     /**
@@ -458,6 +478,7 @@ export default {
       this.userDialog.visible = true
       //把当前编辑的数据复制到表单数据域，供回显使用
       this.$objCopy(row, this.user)
+
     },
     /**
      * 新增或编辑取消事件
@@ -466,6 +487,12 @@ export default {
       this.userDialog.visible = false //关闭窗口
     }
     ,
+    getJobId() {
+      const job = this.jobs.find(item => item.jobName === this.user.jobName);
+      if(job){
+        this.user.jobId=job.id;
+      }
+    },
     /**
      * 新增或编辑确认事件
      */
@@ -474,6 +501,8 @@ export default {
         if (valid) {
           let res = null
           //判断用户ID是否为空
+          this.getJobId()
+          console.log(11111111111111111111111)
           if (this.user.id === '') {
             //新增
             //发送添加请求
@@ -558,6 +587,7 @@ export default {
       if (!isLt10M) {
         this.$message.error('上传头像图片大小不能超过 10MB!')
       }
+      this.uploadHeader.token=getToken()
       return isJPG && isLt10M
     },
     /**
@@ -567,7 +597,7 @@ export default {
       let confirm = await this.$myconfirm('确定要删除该数据吗?')
       if (confirm) {
         //封装条件
-        let params = { id: row.id }
+        let params = {id: row.id}
         //发送删除请求
         let res = await userApi.deleteUser(params)
         //判断是否成功
@@ -583,7 +613,7 @@ export default {
     /**
      * 打开分配角色
      */
-    async assignRole(row){
+    async assignRole(row) {
       //防止回显出现问题
       this.selectedIds = [];
       this.selectedUserId = "";
@@ -602,7 +632,7 @@ export default {
       //发送根据用户ID查询角色列表的请求
       let res = await userApi.getRoleIdByUserId(params);
       //如果存在数据
-      if (res.success && res.data){
+      if (res.success && res.data) {
         //将查询到的角色ID列表交给选中角色数组
         this.selectedIds = res.data;
         //循环遍历
@@ -636,21 +666,21 @@ export default {
     /**
      * 分配角色取消事件
      */
-    onAssignClose(){
+    onAssignClose() {
       //隐藏窗口
       this.assignDialog.visible = false;
     },
     /**
      * 当每页数量发生变化时触发该事件
      */
-    assignSizeChange(size){
+    assignSizeChange(size) {
       this.roleVo.pageSize = size; //将每页显示的数量交给成员变量
       this.getAssignRoleList(this.roleVo.pageNo, size);
     },
     /**
      * 当页码发生变化时触发该事件
      */
-    assignCurrentChange(page){
+    assignCurrentChange(page) {
       this.roleVo.pageNo = page;
       //调用查询方法
       this.getAssignRoleList(page, this.roleVo.pageSize);
@@ -658,11 +688,11 @@ export default {
     /**
      * 当点击多选框时触发该事件
      */
-    handleSelectionChange(rows){
+    handleSelectionChange(rows) {
       let roleIds = [];
       //循环遍历选中的角色ID
       for (let i = 0; i < rows.length; i++) {
-      //将当前选中的角色ID放到数组中
+        //将当前选中的角色ID放到数组中
         roleIds.push(rows[i].id);
       }
       //将选中的角色ID交给成员变量
@@ -671,7 +701,7 @@ export default {
     /**
      * 分配角色确认事件
      */
-    async onAssignConfirm(){
+    async onAssignConfirm() {
       //判断用户是否有选中角色
       if (this.selectedIds.length === 0) {
         this.$message.warning("请选择要分配的角色！");
@@ -691,6 +721,10 @@ export default {
       } else {
         this.$message.error(res.message);
       }
+    },
+    async getjobList() {
+      let res = await jobApi.getJobListApi();
+      this.jobs = res.data.records;
     }
   }
   ,
@@ -699,6 +733,7 @@ export default {
     this.getDeptList();
     //调用查询用户列表
     this.search(this.departmentId);
+    this.getjobList();
   }
   ,
   mounted() {

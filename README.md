@@ -97,8 +97,12 @@ npm run dev
 
 ## 预览图
 
-![image-20240804171011069](C:\Users\12785\AppData\Roaming\Typora\typora-user-images\image-20240804171011069.png)
-
-![image-20240804171202798](C:\Users\12785\AppData\Roaming\Typora\typora-user-images\image-20240804171202798.png)![image-20240804171216395](C:\Users\12785\AppData\Roaming\Typora\typora-user-images\image-20240804171216395.png)
-
-![image-20240804171056036](C:\Users\12785\AppData\Roaming\Typora\typora-user-images\image-20240804171056036.png)![image-20240804171106235](C:\Users\12785\AppData\Roaming\Typora\typora-user-images\image-20240804171106235.png)![image-20240804171113511](C:\Users\12785\AppData\Roaming\Typora\typora-user-images\image-20240804171113511.png)![image-20240804171120453](C:\Users\12785\AppData\Roaming\Typora\typora-user-images\image-20240804171120453.png)![image-20240804171128843](C:\Users\12785\AppData\Roaming\Typora\typora-user-images\image-20240804171128843.png)![image-20240804171141777](C:\Users\12785\AppData\Roaming\Typora\typora-user-images\image-20240804171141777.png)
+![image-20240804171011069](https://lf-admin.oss-cn-beijing.aliyuncs.com/readme/typora-user-images/i1.png)
+![image-20240804171202798](https://lf-admin.oss-cn-beijing.aliyuncs.com/readme/typora-user-images/i2.png)
+![image-20240804171216395](https://lf-admin.oss-cn-beijing.aliyuncs.com/readme/typora-user-images/i3.png)
+![image-20240804171056036](https://lf-admin.oss-cn-beijing.aliyuncs.com/readme/typora-user-images/i4.png)
+![image-20240804171106235](https://lf-admin.oss-cn-beijing.aliyuncs.com/readme/typora-user-images/i5.png)
+![image-20240804171113511](https://lf-admin.oss-cn-beijing.aliyuncs.com/readme/typora-user-images/i6.png)
+![image-20240804171120453](https://lf-admin.oss-cn-beijing.aliyuncs.com/readme/typora-user-images/i7.png)
+![image-20240804171128843](https://lf-admin.oss-cn-beijing.aliyuncs.com/readme/typora-user-images/i8.png)
+![image-20240804171141777](https://lf-admin.oss-cn-beijing.aliyuncs.com/readme/typora-user-images/i9.png)

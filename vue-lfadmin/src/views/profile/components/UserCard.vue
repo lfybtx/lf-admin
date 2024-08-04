@@ -8,8 +8,7 @@
     <div class="user-profile">
       <div class="box-center">
         <pan-thumb :image="user.avatar" :height="'100px'" :width="'100px'" :hoverable="false">
-          <div>点击修改头像
-          </div>
+
           <el-upload
             class="avatar-uploader"
             action="http://localhost:8080/api/user/avatar/upload?module=avatar"
@@ -17,6 +16,9 @@
             :data="uploadHeader"
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload">
+            <div>
+              <span style="font-size: x-small">点击修改头像，修改后需提交</span>
+            </div>
             <img v-if="imageUrl" :src="imageUrl">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>

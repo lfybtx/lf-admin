@@ -14,7 +14,7 @@
         <el-input v-model="user.email"/>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submit">修改信息</el-button>
+        <el-button type="primary" @click="submit">提交修改</el-button>
         <el-button type="warning" @click="openPasswordDialog">修改密码</el-button>
       </el-form-item>
     </el-form>
